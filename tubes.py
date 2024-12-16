@@ -34,6 +34,40 @@ class QuizApp:
 
 
 
+    def sign_up_screen(self):
+        self.clear_screen()
+
+        tk.Label(self.root, text="Sign Up", font=("Arial", 18)).pack(pady=10)
+
+        tk.Label(self.root, text="Username").pack()
+        self.new_username_entry = tk.Entry(self.root)
+        self.new_username_entry.pack()
+
+        tk.Label(self.root, text="Password").pack()
+        self.new_input_password = tk.Entry(self.root, show="*")
+        self.new_input_password.pack()
+
+        tk.Label(self.root, text="Select Mode").pack(pady=10)
+
+        # Tombol untuk memilih mode Teacher
+        self.selected_mode = tk.StringVar(value="")  # Variabel untuk menyimpan mode
+        teacher_button = tk.Button(self.root, text="Teacher", bg="blue", fg="white",
+                                    command=lambda: self.set_mode("teacher"))
+        teacher_button.pack(pady=5)
+
+        # Tombol untuk memilih mode Student
+        student_button = tk.Button(self.root, text="Student", bg="green", fg="white",
+                                    command=lambda: self.set_mode("student"))
+        student_button.pack(pady=5)
+
+        # Tombol daftar dan kembali
+        tk.Button(self.root, text="Register", command=self.sign_up).pack(pady=10)
+        tk.Button(self.root, text="Back to Login", command=self.login_screen).pack()
+
+    def set_mode(self, mode):
+        """Mengatur mode yang dipilih pada tombol Sign-Up"""
+        self.selected_mode.set(mode)
+        messagebox.showinfo("Mode Selected", f"You selected: {mode.capitalize()}")
 
 
 
@@ -48,7 +82,17 @@ class QuizApp:
 
 
 
+    def sign_up(self):
+        username = self.new_username_entry.get()
+        password = self.new_input_password.get()
+        mode = self.selected_mode.get()
 
+        if username in self.users:
+            messagebox.showerror("Error", "Username sudah terdaftar!")
+        else:
+            self.users[username] = {"password": password, "mode": mode}
+            messagebox.showinfo("Success", "Selamat anda sudah terdaftar!")
+            self.login_screen()
 
 
 
