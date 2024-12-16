@@ -34,21 +34,6 @@ class QuizApp:
         tk.Button(self.root, text="Sign In", command=self.sign_in).pack(pady=5)
         tk.Button(self.root, text="Sign Up", command=self.sign_up_screen).pack()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def sign_up_screen(self):
         self.clear_screen()
 
@@ -84,17 +69,17 @@ class QuizApp:
         self.selected_mode.set(mode)
         messagebox.showinfo("Mode Selected", f"You selected: {mode.capitalize()}")
 
-
-
-
-
-
-
-
-
-
-
-
+    def sign_in(self):
+        username = self.input_username.get()
+        password = self.input_password.get()
+        if username in self.users and self.users[username]["password"] == password:
+            self.current_user = username
+            if self.users[username]["mode"] == "teacher":
+                self.teacher_dashboard()
+            else:
+                self.student_dashboard()
+        else:
+            messagebox.showerror("Error", "Invalid username or password")
 
 
     def sign_up(self):
@@ -108,61 +93,6 @@ class QuizApp:
             self.users[username] = {"password": password, "mode": mode}
             messagebox.showinfo("Success", "Selamat anda sudah terdaftar!")
             self.login_screen()
-
-
-
-
-
-    def sign_in(self):
-        username = self.input_username.get()
-        password = self.input_password.get()
-
-        if username in self.users and self.users[username]["password"] == password:
-            self.current_user = username
-            if self.users[username]["mode"] == "teacher":
-                self.teacher_dashboard()
-            else:
-                self.student_dashboard()
-        else:
-            messagebox.showerror("Error", "Invalid username or password")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     def teacher_dashboard(self):
