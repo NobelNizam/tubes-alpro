@@ -20,7 +20,7 @@
 
     def login_screen(self):
         self.clear_screen()
-        
+        # tampilan screen login 
         tk.Label(self.root, text="Quiz Pak Tirta", font=("Times New Roman", 18)).pack(pady=10)
 
         tk.Label(self.root, text="Username").pack()
