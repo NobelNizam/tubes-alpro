@@ -190,59 +190,59 @@ class QuizApp:
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid number")
 
+   def student_dashboard(self):
+        self.clear_screen()
+
+        tk.Label(self.root, text="Student Dashboard", font=("Arial", 18)).pack(pady=10)
+
+        tk.Button(self.root, text="Start Quiz", command=self.start_quiz).pack(pady=5)
+        tk.Button(self.root, text="Logout", command=self.login_screen).pack(pady=5)
+
+    def start_quiz(self):
+        if not self.questions:
+            messagebox.showerror("Error", "No questions available")
+            return
+
+        self.score = 0
+        self.attempts = 0
+        self.questions = random.sample(self.questions, len(self.questions))
+        self.next_question()
+
+    def next_question(self):
+        if self.attempts < len(self.questions):
+            self.current_question = self.questions[self.attempts]
+            self.attempts += 1
+            self.quiz_screen()
+        else:
+            messagebox.showinfo("Quiz Completed", f"Your score: {self.score}/{len(self.questions)}")
+            self.student_dashboard()
+            return  # Basis untuk menghentikan rekursi
+        
+        # Rekursif dipanggil di akhir untuk melanjutkan ke pertanyaan berikutnya
+        def proceed_to_next_question():
+            if self.answer_entry.get().lower() == self.current_question["answer"].lower():
+                self.score += 1
+            self.next_question()  # Rekursi di sini
+
+        # Tombol Submit sekarang memanggil fungsi dalam fungsi untuk meneruskan rekursi
+        self.clear_screen()
+        tk.Label(self.root, text=f"Question {self.attempts}", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text=self.current_question["question"], wraplength=400).pack(pady=10)
+        self.answer_entry = tk.Entry(self.root, width=50)
+        self.answer_entry.pack()
+        tk.Button(self.root, text="Submit", command=proceed_to_next_question).pack(pady=5)
 
 
+    def quiz_screen(self):
+        self.clear_screen()
 
+        tk.Label(self.root, text=f"Question {self.attempts}", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text=self.current_question["question"], wraplength=400).pack(pady=10)
 
+        self.answer_entry = tk.Entry(self.root, width=50)
+        self.answer_entry.pack()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        tk.Button(self.root, text="Submit", command=self.check_answer).pack(pady=5)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
