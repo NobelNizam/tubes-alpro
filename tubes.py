@@ -190,7 +190,7 @@ class QuizApp:
         except ValueError:
             messagebox.showerror("Error", "Please enter a valid number")
 
-   def student_dashboard(self):
+    def student_dashboard(self):
         self.clear_screen()
 
         tk.Label(self.root, text="Student Dashboard", font=("Arial", 18)).pack(pady=10)
