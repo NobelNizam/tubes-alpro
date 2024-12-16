@@ -242,7 +242,7 @@ class QuizApp:
         self.answer_entry = tk.Entry(self.root, width=50)
         self.answer_entry.pack()
 
-        tk.Button(self.root, text="Submit", command=self.check_answer).pack(pady=5)
+        tk.Button(self.root, text="Submit", command=self.next_question).pack(pady=5)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
