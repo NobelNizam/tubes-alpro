@@ -21,7 +21,10 @@ class QuizApp:
     def login_screen(self):
         self.clear_screen()
         
-        tk.Label(self.root, text="Quiz Pak Tirta", font=("Times New Roman", 18)).pack(pady=10)
+        if self.current_user is None:
+            tk.Label(self.root, text="Silahkan Daftar", font=("Times New Roman", 18)).pack(pady=10)
+        else:
+            tk.Label(self.root, text="Silahkan Masuk", font=("Times New Roman", 18)).pack(pady=10)
 
         tk.Label(self.root, text="Username").pack()
         self.input_username = tk.Entry(self.root)
@@ -31,13 +34,13 @@ class QuizApp:
         self.input_password = tk.Entry(self.root, show="0")
         self.input_password.pack()
 
-        tk.Button(self.root, text="Sign In", command=self.sign_in).pack(pady=5)
-        tk.Button(self.root, text="Sign Up", command=self.sign_up_screen).pack()
+        tk.Button(self.root, text="Masuk", command=self.sign_in).pack(pady=5)
+        tk.Button(self.root, text="Daftar", command=self.sign_up_screen).pack()
 
     def sign_up_screen(self):
         self.clear_screen()
 
-        tk.Label(self.root, text="Sign Up", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text="Daftar", font=("Times New Roman", 18)).pack(pady=10)
 
         tk.Label(self.root, text="Username").pack()
         self.new_username_entry = tk.Entry(self.root)
@@ -47,27 +50,27 @@ class QuizApp:
         self.new_input_password = tk.Entry(self.root, show="*")
         self.new_input_password.pack()
 
-        tk.Label(self.root, text="Select Mode").pack(pady=10)
+        tk.Label(self.root, text="Siapa anda?").pack(pady=10)
 
         # Tombol untuk memilih mode Teacher
         self.selected_mode = tk.StringVar(value="")  # Variabel untuk menyimpan mode
-        teacher_button = tk.Button(self.root, text="Teacher", bg="blue", fg="white",
+        teacher_button = tk.Button(self.root, text="Dosen", bg="blue", fg="white",
                                     command=lambda: self.set_mode("teacher"))
         teacher_button.pack(pady=5)
 
         # Tombol untuk memilih mode Student
-        student_button = tk.Button(self.root, text="Student", bg="green", fg="white",
+        student_button = tk.Button(self.root, text="Mahasiswa", bg="green", fg="white",
                                     command=lambda: self.set_mode("student"))
         student_button.pack(pady=5)
 
         # Tombol daftar dan kembali
-        tk.Button(self.root, text="Register", command=self.sign_up).pack(pady=10)
-        tk.Button(self.root, text="Back to Login", command=self.login_screen).pack()
+        tk.Button(self.root, text="Konfirmasi", command=self.sign_up).pack(pady=10)
+        tk.Button(self.root, text="Kembali", command=self.login_screen).pack()
 
     def set_mode(self, mode):
         """Mengatur mode yang dipilih pada tombol Sign-Up"""
         self.selected_mode.set(mode)
-        messagebox.showinfo("Mode Selected", f"You selected: {mode.capitalize()}")
+        messagebox.showinfo("Berhasil!", f"Anda adalah: {mode.capitalize()}")
 
     def sign_in(self):
         username = self.input_username.get()
@@ -91,34 +94,35 @@ class QuizApp:
             messagebox.showerror("Error", "Username sudah terdaftar!")
         else:
             self.users[username] = {"password": password, "mode": mode}
-            messagebox.showinfo("Success", "Selamat anda sudah terdaftar!")
+            messagebox.showinfo("Berhasil", "Selamat anda sudah terdaftar!")
+            self.current_user = username
             self.login_screen()
 
 
     def teacher_dashboard(self):
         self.clear_screen()
 
-        tk.Label(self.root, text="Teacher Dashboard", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text="Menu Dosen", font=("Times New Roman", 18)).pack(pady=10)
 
-        tk.Button(self.root, text="Add Question", command=self.add_question_screen).pack(pady=5)
-        tk.Button(self.root, text="Edit/Delete Questions", command=self.edit_questions_screen).pack(pady=5)
-        tk.Button(self.root, text="Logout", command=self.login_screen).pack(pady=5)
+        tk.Button(self.root, text="Buat Soal", command=self.add_question_screen).pack(pady=5)
+        tk.Button(self.root, text="Ubah Soal", command=self.edit_questions_screen).pack(pady=5)
+        tk.Button(self.root, text="Keluar", command=self.login_screen).pack(pady=5)
 
     def add_question_screen(self):
         self.clear_screen()
 
-        tk.Label(self.root, text="Add Question", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text="Tambah Soal", font=("Times New Roman", 18)).pack(pady=10)
 
-        tk.Label(self.root, text="Question").pack()
+        tk.Label(self.root, text="Soal").pack()
         self.question_entry = tk.Entry(self.root, width=50)
         self.question_entry.pack()
 
-        tk.Label(self.root, text="Answer").pack()
+        tk.Label(self.root, text="Jawaban").pack()
         self.answer_entry = tk.Entry(self.root, width=50)
         self.answer_entry.pack()
 
-        tk.Button(self.root, text="Add", command=self.add_question).pack(pady=5)
-        tk.Button(self.root, text="Back", command=self.teacher_dashboard).pack()
+        tk.Button(self.root, text="Tambah", command=self.add_question).pack(pady=5)
+        tk.Button(self.root, text="Kembali", command=self.teacher_dashboard).pack()
 
     def add_question(self):
         question = self.question_entry.get()
@@ -134,18 +138,18 @@ class QuizApp:
     def edit_questions_screen(self):
         self.clear_screen()
 
-        tk.Label(self.root, text="Edit/Delete Questions", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text="Ubah Soal", font=("Times New Roman", 18)).pack(pady=10)
 
         for i, q in enumerate(self.questions):
             tk.Label(self.root, text=f"{i + 1}. {q['question']} (Answer: {q['answer']})").pack()
 
-        tk.Label(self.root, text="Select Question Number to Edit/Delete").pack()
+        tk.Label(self.root, text="Pilih nomor soal yang ingin diubah").pack()
         self.question_number_entry = tk.Entry(self.root)
         self.question_number_entry.pack()
 
-        tk.Button(self.root, text="Edit", command=self.edit_question).pack(pady=5)
-        tk.Button(self.root, text="Delete", command=self.delete_question).pack(pady=5)
-        tk.Button(self.root, text="Back", command=self.teacher_dashboard).pack()
+        tk.Button(self.root, text="Ubah", command=self.edit_question).pack(pady=5)
+        tk.Button(self.root, text="Hapus", command=self.delete_question).pack(pady=5)
+        tk.Button(self.root, text="Kembali", command=self.teacher_dashboard).pack()
 
     def edit_question(self):
         try:
@@ -153,29 +157,29 @@ class QuizApp:
             if 0 <= index < len(self.questions):
                 self.clear_screen()
 
-                tk.Label(self.root, text="Edit Question", font=("Arial", 18)).pack(pady=10)
+                tk.Label(self.root, text="Edit Question", font=("Times New Roman", 18)).pack(pady=10)
 
-                tk.Label(self.root, text="Question").pack()
+                tk.Label(self.root, text="Soal").pack()
                 self.edit_question_entry = tk.Entry(self.root, width=50)
                 self.edit_question_entry.insert(0, self.questions[index]['question'])
                 self.edit_question_entry.pack()
 
-                tk.Label(self.root, text="Answer").pack()
+                tk.Label(self.root, text="Jawaban").pack()
                 self.edit_answer_entry = tk.Entry(self.root, width=50)
                 self.edit_answer_entry.insert(0, self.questions[index]['answer'])
                 self.edit_answer_entry.pack()
 
-                tk.Button(self.root, text="Save", command=lambda: self.save_question(index)).pack(pady=5)
-                tk.Button(self.root, text="Back", command=self.edit_questions_screen).pack()
+                tk.Button(self.root, text="Simpan", command=lambda: self.save_question(index)).pack(pady=5)
+                tk.Button(self.root, text="Kembali", command=self.edit_questions_screen).pack()
             else:
-                messagebox.showerror("Error", "Invalid question number")
+                messagebox.showerror("Error", "Salah nomor soal!")
         except ValueError:
-            messagebox.showerror("Error", "Please enter a valid number")
+            messagebox.showerror("Error", "Salah nomor soal!")
 
     def save_question(self, index):
         self.questions[index]["question"] = self.edit_question_entry.get()
         self.questions[index]["answer"] = self.edit_answer_entry.get()
-        messagebox.showinfo("Success", "Question updated")
+        messagebox.showinfo("Berhasil!", "Soal ditambahkan!")
         self.edit_questions_screen()
 
     def delete_question(self):
@@ -183,24 +187,24 @@ class QuizApp:
             index = int(self.question_number_entry.get()) - 1
             if 0 <= index < len(self.questions):
                 del self.questions[index]
-                messagebox.showinfo("Success", "Question deleted")
+                messagebox.showinfo("Berhasil!", "Soal dihapus!")
                 self.edit_questions_screen()
             else:
-                messagebox.showerror("Error", "Invalid question number")
+                messagebox.showerror("Error", "Salah nomor soal!")
         except ValueError:
-            messagebox.showerror("Error", "Please enter a valid number")
+            messagebox.showerror("Error", "Salah nomor soal!")
 
     def student_dashboard(self):
         self.clear_screen()
 
-        tk.Label(self.root, text="Student Dashboard", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text="Silahkan Quiz", font=("Times New Roman", 18)).pack(pady=10)
 
-        tk.Button(self.root, text="Start Quiz", command=self.start_quiz).pack(pady=5)
-        tk.Button(self.root, text="Logout", command=self.login_screen).pack(pady=5)
+        tk.Button(self.root, text="Mulai", command=self.start_quiz).pack(pady=5)
+        tk.Button(self.root, text="Keluar", command=self.login_screen).pack(pady=5)
 
     def start_quiz(self):
         if not self.questions:
-            messagebox.showerror("Error", "No questions available")
+            messagebox.showerror("Error", "Belum ada soal!")
             return
 
         self.score = 0
@@ -214,7 +218,7 @@ class QuizApp:
             self.attempts += 1
             self.quiz_screen()
         else:
-            messagebox.showinfo("Quiz Completed", f"Your score: {self.score}/{len(self.questions)}")
+            messagebox.showinfo("Quiz Selesai!", f"Score: {self.score}/{len(self.questions)}")
             self.student_dashboard()
             return  # Basis untuk menghentikan rekursi
         
@@ -226,23 +230,23 @@ class QuizApp:
 
         # Tombol Submit sekarang memanggil fungsi dalam fungsi untuk meneruskan rekursi
         self.clear_screen()
-        tk.Label(self.root, text=f"Question {self.attempts}", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text=f"Question {self.attempts}", font=("Times New Roman", 18)).pack(pady=10)
         tk.Label(self.root, text=self.current_question["question"], wraplength=400).pack(pady=10)
         self.answer_entry = tk.Entry(self.root, width=50)
         self.answer_entry.pack()
-        tk.Button(self.root, text="Submit", command=proceed_to_next_question).pack(pady=5)
+        tk.Button(self.root, text="Selesai?", command=proceed_to_next_question).pack(pady=5)
 
 
     def quiz_screen(self):
         self.clear_screen()
 
-        tk.Label(self.root, text=f"Question {self.attempts}", font=("Arial", 18)).pack(pady=10)
+        tk.Label(self.root, text=f"Question {self.attempts}", font=("Times New Roman", 18)).pack(pady=10)
         tk.Label(self.root, text=self.current_question["question"], wraplength=400).pack(pady=10)
 
         self.answer_entry = tk.Entry(self.root, width=50)
         self.answer_entry.pack()
 
-        tk.Button(self.root, text="Submit", command=self.next_question).pack(pady=5)
+        tk.Button(self.root, text="Selesai?", command=self.next_question).pack(pady=5)
 
     def clear_screen(self):
         for widget in self.root.winfo_children():
